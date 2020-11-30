@@ -1,23 +1,29 @@
-import logo from './logo.svg';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
+
+  const [data, setdata] = useState([{}]);
+  
+  useEffect(() => {
+    async function getAPI() {
+      const api = await fetch("https://api.github.com/users/muhammadmohsin/repos");
+      const json = await api.json();
+      console.log(json);
+      setdata(json);
+    }
+    getAPI();
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>API call</h1>
+      <p>getting list from remote repository through api</p>
+      <ul>
+        {data.map((dataObj, ind) => {
+          return (<li key={ind}>{dataObj.name}</li>)
+        })}
+      </ul>
     </div>
   );
 }
